@@ -18,3 +18,10 @@
 - (NSMutableArray *)zh_getLinesArrayWithFont:(UIFont *)calculateFont limitWidth:(CGFloat)limitWidth;
 
 @end
+
+@interface NSString (ZHDate)
+
+/** date --> string */
+- (NSDate *)dateFromStringFormat:(NSString *)dateFormat;
+
+@end

@@ -95,3 +95,23 @@
 }
 
 @end
+
+@implementation NSString (ZHDate)
+
+- (NSDate *)dateFromStringFormat:(NSString *)dateFormat{
+    //    @"Tue Dec 13 06:44:07 +0800 2016"
+    //    周二 12月 13 15:52:29 +0800 2016
+    //设置区域  @"en_US" @"zh_CH"
+    NSLocale *local =[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+    //设置时区
+    //    NSTimeZone *timeZone = [NSTimeZone timeZoneForSecondsFromGMT:8];
+    
+    NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+    [fmt setLocale:local];
+    //    [fmt setTimeZone:timeZone];
+    //    fmt.dateFormat = @"EEE MMM dd HH:mm:ss Z yyyy";
+    fmt.dateFormat = dateFormat;
+    return [fmt dateFromString:self];
+}
+
+@end
