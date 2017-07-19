@@ -19,7 +19,8 @@
     NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
     [fmt setLocale:local];
     //    [fmt setTimeZone:timeZone];
-    //    fmt.dateFormat = @"EEE MMM dd HH:mm:ss Z yyyy";
+//    星期 月 日 小时  分钟  秒 时区  年  上下午
+    //    fmt.dateFormat = @"EEE MMM dd HH:mm:ss Z yyyy aaa";
     fmt.dateFormat = dateFormat;
     return [fmt stringFromDate:self];
 }
