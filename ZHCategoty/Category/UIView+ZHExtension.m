@@ -87,3 +87,17 @@
 }
 
 @end
+
+
+@implementation UIView (ZHCornerExtension)
+
+/** 设置单个角的圆角 */
+- (void)zh_setSingleCornerRadius:(CGFloat)radius rectCorner:(UIRectCorner)rectCorner{
+    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:self.bounds byRoundingCorners:rectCorner cornerRadii:CGSizeMake(radius, radius)];
+    CAShapeLayer *layer = [[CAShapeLayer alloc] init];
+    layer.frame = self.bounds;
+    layer.path = path.CGPath;
+    self.layer.mask = layer;
+}
+
+@end

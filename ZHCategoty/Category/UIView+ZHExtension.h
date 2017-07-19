@@ -20,3 +20,10 @@
 @property (assign, nonatomic) CGFloat centerY;
 
 @end
+
+@interface UIView (ZHCornerExtension)
+
+/** 设置单个角的圆角 */
+- (void)zh_setSingleCornerRadius:(CGFloat)radius rectCorner:(UIRectCorner)rectCorner;
+
+@end
