@@ -29,6 +29,6 @@
 @interface NSString (ZHPinYin)
 
 /** 中文转换成拼音 是否显示音调  你好--->ni hao 、 nǐ hǎo */
-- (NSString *)convertToPinYin:(BOOL)isShowTone;
+- (NSString *)zh_convertToPinYin:(BOOL)isShowTone;
 
 @end
