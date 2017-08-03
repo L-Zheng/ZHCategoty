@@ -94,11 +94,30 @@
     return [attStr zh_getLinesArrayWithLimitWidth:width];
 }
 
+- (NSUInteger)zh_realLength{
+    //去掉空格
+    NSString *st = [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    char *p = (char *)[st cStringUsingEncoding:NSUnicodeStringEncoding];
+    NSUInteger lengthOfBytes = [st lengthOfBytesUsingEncoding:NSUnicodeStringEncoding];
+    NSUInteger strlength = 0;
+    for (int i = 0 ; i < lengthOfBytes ;i++) {
+        if (*p) {
+            p++;
+            strlength++;
+        }
+        else {
+            p++;
+        }
+    }
+    return strlength;
+}
+
 @end
 
-@implementation NSString (ZHDate)
+@implementation NSString (ZHDateExtension)
 
-- (NSDate *)dateFromStringFormat:(NSString *)dateFormat{
+- (NSDate *)zh_dateFromStringFormat:(NSString *)dateFormat{
     //    @"Tue Dec 13 06:44:07 +0800 2016"
     //    周二 12月 13 15:52:29 +0800 2016
     //设置区域  @"en_US" @"zh_CH"
@@ -116,7 +135,7 @@
 
 @end
 
-@implementation NSString (ZHPinYin)
+@implementation NSString (ZHPinYinExtension)
 
 /** 中文转换成拼音 是否显示音调  你好--->ni hao 、 nǐ hǎo */
 - (NSString *)zh_convertToPinYin:(BOOL)isShowTone{
@@ -143,6 +162,118 @@
     CFStringTransform((__bridge CFMutableStringRef)source, NULL, kCFStringTransformMandarinLatin, NO);
     CFStringTransform((__bridge CFMutableStringRef)source, NULL, kCFStringTransformStripDiacritics, isShowTone);
     return source;
+}
+
+@end
+
+//正则匹配
+@implementation NSString (ZHRegularExtension)
+
+- (BOOL)zh_isEmail{
+    NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+    NSPredicate *emailPredicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailPredicate evaluateWithObject:self];
+}
+
+- (BOOL)zh_isUrl{
+    NSString *regex = @"http(s)?:\\/\\/([\\w-]+\\.)+[\\w-]+(\\/[\\w- .\\/?%&=]*)?";
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+    return [pred evaluateWithObject:self];
+}
+
+- (BOOL)zh_isTelephone{
+    /**
+     * 手机号码
+     * 移动：134[0-8],135,136,137,138,139,150,151,157,158,159,182,187,188
+     * 联通：130,131,132,152,155,156,185,186
+     * 电信：133,1349,153,180,189
+     */
+    NSString * MOBILE = @"^1(3[0-9]|5[0-35-9]|8[025-9])\\d{8}$";
+    /**
+     10         * 中国移动：China Mobile
+     11         * 134[0-8],135,136,137,138,139,150,151,157,158,159,182,187,188
+     12         */
+    NSString * CM = @"^1(34[0-8]|(3[5-9]|5[017-9]|8[278])\\d)\\d{7}$";
+    /**
+     15         * 中国联通：China Unicom
+     16         * 130,131,132,152,155,156,185,186
+     17         */
+    NSString * CU = @"^1(3[0-2]|5[256]|8[56])\\d{8}$";
+    /**
+     20         * 中国电信：China Telecom
+     21         * 133,1349,153,180,189
+     22         */
+    NSString * CT = @"^1((33|53|8[09])[0-9]|349)\\d{7}$";
+    /**
+     25         * 大陆地区固话及小灵通
+     26         * 区号：010,020,021,022,023,024,025,027,028,029
+     27         * 号码：七位或八位
+     28         */
+    NSString * PHS = @"^0(10|2[0-5789]|\\d{3})\\d{7,8}$";
+    NSPredicate *regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", MOBILE];
+    NSPredicate *regextestcm = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", CM];
+    NSPredicate *regextestcu = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", CU];
+    NSPredicate *regextestct = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", CT];
+    NSPredicate *regextestphs = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", PHS];
+
+    if ([regextestmobile evaluateWithObject:self]
+        || [regextestcm evaluateWithObject:self]
+        || [regextestct evaluateWithObject:self]
+        || [regextestcu evaluateWithObject:self]
+        || [regextestphs evaluateWithObject:self]){
+        
+        if([regextestcm evaluateWithObject:self] == YES) {
+            NSLog(@"China Mobile");
+        } else if([regextestct evaluateWithObject:self] == YES) {
+            NSLog(@"China Telecom");
+        } else if ([regextestcu evaluateWithObject:self] == YES) {
+            NSLog(@"China Unicom");
+        } else {
+            NSLog(@"Unknow");
+        }
+        return YES;
+    } else{
+        return NO;
+    }
+}
+
+- (BOOL)zh_isAllNumberStr{
+    NSString *number =@"0123456789";
+    NSCharacterSet * cs =[[NSCharacterSet characterSetWithCharactersInString:number]invertedSet];
+    NSString * comparStr = [[self componentsSeparatedByCharactersInSet:cs]componentsJoinedByString:@""];
+    return [self isEqualToString:comparStr];
+}
+
+- (NSNumber *)zh_asNumber{
+    NSString *regEx = @"^-?\\d+.?\\d?";
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regEx];
+    BOOL isMatch = [pred evaluateWithObject:self];
+    if (isMatch) {
+        return [NSNumber numberWithDouble:[self doubleValue]];
+    }
+    return nil;
+}
+
+/** 匹配帐号是否合法(字母开头，允许4-21字节，允许字母数字下划线) */
+- (BOOL)isUserName{
+    NSString *regex = @"(^[a-zA-Z][A-Za-z0-9_]{3,20}$)";
+    
+    /*
+     ^[a-zA-Z][A-Za-z0-9_]{3,20}$  (字母开头，允许4-21字节，允许字母数字下划线)
+     ^[A-Za-z0-9_]{6,20}$  (允许6-20字节，允许字母数字下划线)
+     ^[A-Za-z]+$　　       //匹配由26个英文字母组成的字符串
+     ^[A-Z]+$　　          //匹配由26个英文字母的大写组成的字符串
+     ^[a-z]+$　　          //匹配由26个英文字母的小写组成的字符串
+     ^[A-Za-z0-9]+$　　    //匹配由数字和26个英文字母组成的字符串
+     ^\w+$　　             //匹配由数字、26个英文字母或者下划线组成的字符串
+     [\u4e00-\u9fa5]         匹配中文:
+     ^[\u4E00-\u9FA5]{2,4}$  2~4个汉字
+
+     */
+    
+    
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+    return [pred evaluateWithObject:self];
 }
 
 @end
