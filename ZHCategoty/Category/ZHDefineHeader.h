@@ -11,10 +11,12 @@
 
 
 #pragma mark - Version
-//(systemVersion >= 9.0)
+
+//系统版本 (systemVersion >= 9.0)
 #define kSystemVersion [[UIDevice currentDevice].systemVersion floatValue]
-// NSString类型
-#define kAppVersion [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]
+
+//App信息
+#define kAppShortVersion [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]
 #define kAppBuildVersion [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]
 
 
@@ -22,9 +24,12 @@
 //屏幕尺寸
 #define kScreen_Width [[UIScreen mainScreen]bounds].size.width
 #define kScreen_Height [[UIScreen mainScreen]bounds].size.height
+
 //设备类型
+//(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 #define kIsIpad ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
 #define kIsIphone ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+#define kIsSimulator TARGET_IPHONE_SIMULATOR
 
 #define kIsiPhone4 (kScreen_Width == 320 && kScreen_Height == 480)
 #define kIsiPhone5 (kScreen_Width == 320 && kScreen_Height == 568)
@@ -36,5 +41,10 @@
 #define kIsScreen2X (kIsiPhone4 || kIsiPhone5 || kIsiPhone6 || kIsiPhone7)
 #define kIsScreen3X (kIsiPhone6Plus || kIsiPhone7Plus)
 
+#pragma mark - Path
+//沙盒路径
+#define kAppDocumentPath ([NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0])
+#define kAppCachePath ([NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0])
+#define kTemporaryPath (NSTemporaryDirectory())
 
 #endif /* ZHDefineHeader_h */

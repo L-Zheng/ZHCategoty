@@ -18,7 +18,8 @@
 #import "NSString+ZHExtension.h"
 #import "NSAttributedString+ZHExtension.h"
 #import "NSDate+ZHExtension.h"
-
+#import "UIApplication+ZHExtension.h"
+#import "UIDevice+ZHExtension.h"
 
 
 #endif /* ZHCategoryHeader_h */

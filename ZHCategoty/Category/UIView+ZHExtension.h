@@ -26,4 +26,10 @@
 /** 设置单个角的圆角 */
 - (void)zh_setSingleCornerRadius:(CGFloat)radius rectCorner:(UIRectCorner)rectCorner;
 
+/** 设置圆角 */
+- (void)zh_setViewCornerRadius:(CGFloat)radius;
+
+/** 设置边框 */
+- (void)zh_setViewBorder:(CGFloat)width borderColor:(UIColor *)borderColor;
+
 @end

@@ -100,4 +100,14 @@
     self.layer.mask = layer;
 }
 
+- (void)zh_setViewCornerRadius:(CGFloat)radius{
+    self.layer.masksToBounds = YES;
+    self.layer.cornerRadius = radius;
+}
+
+- (void)zh_setViewBorder:(CGFloat)width borderColor:(UIColor *)borderColor{
+    self.layer.borderColor = [borderColor CGColor];
+    self.layer.borderWidth = width;
+}
+
 @end
