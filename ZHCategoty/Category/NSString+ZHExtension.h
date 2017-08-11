@@ -57,3 +57,34 @@
 
 
 @end
+
+
+//转换
+@interface NSString (ZHConvertExtension)
+
+/** 字符串  -   UTF-8 */
+- (NSString *)zh_utf_8_String;
+
+/** 字符串  -   UTF-8 Data */
+- (NSData *)zh_utf_8_Data;
+
+/** 字符串  -   Base64 Data */
+- (NSData *)zh_Base64_Data;
+
+/** UTF-8  -   字符串 */
+- (NSString *)zh_utf_8_StringToString;
+
+/** 字符串---->UTF-8 Dic字典 or Array数组 */
+- (id)zh_utf_8_DicOrArray;
+
+/** 字符串---->Base64 Image图像 */
+- (UIImage *)zh_Base64_StringToImage;
+
+/**
+ 字符串---->UTF-8 Dic字典   :   字符串---->UTF-8 Data---->UTF-8 Dic
+ 字符串---->UTF-8 Array数组   :   字符串---->UTF-8 Data---->UTF-8 Array
+ 字符串---->Base64 Image图像   :   字符串---->Base64_Data---->Image
+ */
+
+
+@end

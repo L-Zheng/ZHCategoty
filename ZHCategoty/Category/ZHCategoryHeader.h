@@ -20,6 +20,7 @@
 #import "NSDate+ZHExtension.h"
 #import "UIApplication+ZHExtension.h"
 #import "UIDevice+ZHExtension.h"
+#import "NSData+ZHExtension.h"
 
 
 #endif /* ZHCategoryHeader_h */

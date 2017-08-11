@@ -29,6 +29,7 @@
 		0F9CECF11EFBC24800B8092B /* ZHCategotyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F9CECF01EFBC24800B8092B /* ZHCategotyTests.m */; };
 		0F9CECFC1EFBC24800B8092B /* ZHCategotyUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F9CECFB1EFBC24800B8092B /* ZHCategotyUITests.m */; };
 		0F9CEE231EFBC5CB00B8092B /* UIView+ZHExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F9CEE221EFBC5CB00B8092B /* UIView+ZHExtension.m */; };
+		0F9F9FDC1F3D9C97004146D5 /* NSData+ZHExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F9F9FDB1F3D9C97004146D5 /* NSData+ZHExtension.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -94,6 +95,8 @@
 		0F9CECFD1EFBC24800B8092B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0F9CEE211EFBC5CB00B8092B /* UIView+ZHExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+ZHExtension.h"; sourceTree = "<group>"; };
 		0F9CEE221EFBC5CB00B8092B /* UIView+ZHExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+ZHExtension.m"; sourceTree = "<group>"; };
+		0F9F9FDA1F3D9C97004146D5 /* NSData+ZHExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+ZHExtension.h"; sourceTree = "<group>"; };
+		0F9F9FDB1F3D9C97004146D5 /* NSData+ZHExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+ZHExtension.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -208,6 +211,8 @@
 				0F602F621F0380DC0025F513 /* NSDictionary+ZHExtension.m */,
 				0F602F641F0384400025F513 /* NSString+ZHExtension.h */,
 				0F602F651F0384400025F513 /* NSString+ZHExtension.m */,
+				0F9F9FDA1F3D9C97004146D5 /* NSData+ZHExtension.h */,
+				0F9F9FDB1F3D9C97004146D5 /* NSData+ZHExtension.m */,
 				0F602F6A1F0388560025F513 /* NSAttributedString+ZHExtension.h */,
 				0F602F6B1F0388560025F513 /* NSAttributedString+ZHExtension.m */,
 				0F113C091F0A540400A0C300 /* NSDate+ZHExtension.h */,
@@ -366,6 +371,7 @@
 				0F8AA5391F2F0FE000ABC5C2 /* UINavigationItem+ZHExtension.m in Sources */,
 				0F977BEA1F33309B00099C61 /* UIDevice+ZHExtension.m in Sources */,
 				0F113C0B1F0A540400A0C300 /* NSDate+ZHExtension.m in Sources */,
+				0F9F9FDC1F3D9C97004146D5 /* NSData+ZHExtension.m in Sources */,
 				0F9CEE231EFBC5CB00B8092B /* UIView+ZHExtension.m in Sources */,
 				0F602F571F035FC90025F513 /* UIColor+ZHExtension.m in Sources */,
 				0F8AA53D1F2F131200ABC5C2 /* UINavigationBar+ZHExtension.m in Sources */,

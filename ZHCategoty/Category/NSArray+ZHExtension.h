@@ -23,3 +23,11 @@
 @interface NSArray (ZHLogExtension)
 
 @end
+
+@interface NSArray (ZHConvertExtension)
+
+- (NSData *)zh_Data;
+/** UTF-8 Array数组---->字符串   :   UTF-8 Array---->UTF-8 Data---->字符串 */
+- (NSString *)zh_utf_8_String;
+
+@end

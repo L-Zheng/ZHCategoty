@@ -19,3 +19,11 @@
 @interface NSDictionary (ZHLogExtension)
 
 @end
+
+@interface NSDictionary (ZHConvertExtension)
+
+- (NSData *)zh_Data;
+/** UTF-8 Dic数组---->字符串   :   UTF-8 Dic---->UTF-8 Data---->字符串 */
+- (NSString *)zh_utf_8_String;
+
+@end

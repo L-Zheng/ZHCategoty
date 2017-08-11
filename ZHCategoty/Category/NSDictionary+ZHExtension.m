@@ -8,6 +8,7 @@
 
 #import "NSDictionary+ZHExtension.h"
 #import "NSObject+ZHExtension.h"
+#import "NSData+ZHExtension.h"
 
 @implementation NSDictionary (ZHExtension)
 
@@ -46,6 +47,23 @@
     [strM appendString:@"}\n"];
     
     return strM;
+}
+
+@end
+
+@implementation NSDictionary (ZHConvertExtension)
+
+- (NSData *)zh_Data{
+    
+    //如果你不想返回一个可变的对象, 那么可以传入kNilOptions参数
+    //NSJSONWritingPrettyPrinted
+    NSError *error = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:self options:NSJSONWritingPrettyPrinted error:&error];
+    return error ? nil : jsonData;
+}
+
+- (NSString *)zh_utf_8_String{
+    return self.zh_Data.zh_utf_8_String;
 }
 
 @end

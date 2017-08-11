@@ -8,6 +8,7 @@
 
 #import "NSString+ZHExtension.h"
 #import "NSAttributedString+ZHExtension.h"
+#import "NSData+ZHExtension.h"
 #import <CoreText/CoreText.h>
 
 @implementation NSString (ZHExtension)
@@ -274,6 +275,39 @@
     
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
     return [pred evaluateWithObject:self];
+}
+
+@end
+
+
+//转换
+@implementation NSString (ZHConvertExtension)
+
+- (NSString *)zh_utf_8_String{
+//    return [self stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    return [self stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+}
+
+- (NSData *)zh_utf_8_Data{
+    return [self dataUsingEncoding:NSUTF8StringEncoding];
+}
+
+- (NSData *)zh_Base64_Data{
+    return [[NSData alloc] initWithBase64EncodedString:self options:0];
+}
+
+- (NSString *)zh_utf_8_StringToString{
+//    @"\u5982\u4f55\u8054\u7cfb\u5ba2\u670d\u4eba\u5458\uff1f"
+//    return [self stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    return [self stringByRemovingPercentEncoding];
+}
+
+- (id)zh_utf_8_DicOrArray{
+    return self.zh_utf_8_Data.zh_utf_8_DicOrArray;
+}
+
+- (UIImage *)zh_Base64_StringToImage{
+    return self.zh_Base64_Data.zh_image;
 }
 
 @end
