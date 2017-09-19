@@ -23,9 +23,9 @@
         
         zhDeviceLanguage = ZHDeviceLanguageEn_US;
         
-    }else if ([preferredLang isEqualToString:@"zh-Hans-US"]){
-        
-        zhDeviceLanguage = ZHDeviceLanguageZh_Hans_US;
+    }else if ([preferredLang isEqualToString:@"zh-Hans-US"] || [preferredLang isEqualToString:@"zh-Hans-CN"]){
+        //模拟器简体中文zh-Hans-US   真机简体中文zh-Hans-CN
+        zhDeviceLanguage = ZHDeviceLanguageZh_Hans_CN;
         
     }else if ([preferredLang isEqualToString:@"zh-Hant-US"]){
         

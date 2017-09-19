@@ -43,6 +43,9 @@
 /** 邮箱 */
 - (BOOL)zh_isEmail;
 
+/** 身份账号 */
+- (BOOL)zh_isIDCard;
+
 /** url */
 - (BOOL)zh_isUrl;
 

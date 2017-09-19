@@ -101,4 +101,18 @@
     return image;
 }
 
+- (UIImage *)imageFromImageInRect:(CGRect)inRect{
+    //将UIImage转换成CGImageRef
+    CGImageRef sourceImageRef = [self CGImage];
+    
+    //按照给定的矩形区域进行剪裁
+    CGImageRef newImageRef = CGImageCreateWithImageInRect(sourceImageRef, inRect);
+    
+    //将CGImageRef转换成UIImage
+    UIImage *newImage = [UIImage imageWithCGImage:newImageRef];
+    
+    //返回剪裁后的图片
+    return newImage;
+}
+
 @end

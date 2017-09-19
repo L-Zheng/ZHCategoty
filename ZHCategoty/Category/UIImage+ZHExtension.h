@@ -21,4 +21,7 @@
 
 /** iconfont图标 */
 + (UIImage *)zh_iconFontImageWithText:(NSString *)text iconsize:(CGFloat)iconsize color:(UIColor *)color;
+
+/** 从图片中按指定的位置大小截取图片的一部分 */
+- (UIImage *)imageFromImageInRect:(CGRect)inRect;
 @end
