@@ -13,7 +13,7 @@
 - (NSString *)stringFromDateFormat:(NSString *)dateFormat{
     //设置区域  @"en_US" @"zh_CH"
     NSLocale *local =[[NSLocale alloc] initWithLocaleIdentifier:@"zh_CH"];
-    //设置时区
+    //设置时区(如果设置时区 转换的字符串是零时区的时间字符串)
     //    NSTimeZone *timeZone = [NSTimeZone timeZoneForSecondsFromGMT:8];
     
     NSDateFormatter *fmt = [[NSDateFormatter alloc] init];

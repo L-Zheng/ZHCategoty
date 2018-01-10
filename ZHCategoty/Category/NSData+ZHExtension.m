@@ -38,3 +38,11 @@
 }
 
 @end
+
+@implementation NSData (ZHFileExtension)
+
+- (BOOL)writeToFileWithPath:(NSString *)filePath{
+    return [self writeToFile:filePath atomically:YES];
+}
+
+@end

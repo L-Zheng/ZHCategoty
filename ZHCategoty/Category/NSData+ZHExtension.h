@@ -25,3 +25,9 @@
 - (NSString *)zh_Base64_String;
 
 @end
+
+@interface NSData (ZHFileExtension)
+
+- (BOOL)writeToFileWithPath:(NSString *)filePath;
+
+@end
