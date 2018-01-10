@@ -20,6 +20,12 @@
 /** 字符串真实长度  去掉空格 包括中英文混合情况 */
 - (NSUInteger)zh_realLength;
 
+/** 是否全是空格或者换行 */
+- (BOOL)zh_isAllWhitespaceAndNewline;
+
+/** 隐藏中间某一段数字 */
+- (NSString *)zh_hiddenMiddleStr;
+
 @end
 
 @interface NSString (ZHDateExtension)
@@ -35,7 +41,6 @@
 - (NSString *)zh_convertToPinYin:(BOOL)isShowTone;
 
 @end
-
 
 //正则匹配
 @interface NSString (ZHRegularExtension)

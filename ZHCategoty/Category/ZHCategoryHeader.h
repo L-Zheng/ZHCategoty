@@ -10,6 +10,7 @@
 #define ZHCategoryHeader_h
 
 #import "UIView+ZHExtension.h"
+#import "UITextField+ZHExtension.h"
 #import "UIImage+ZHExtension.h"
 #import "UIColor+ZHExtension.h"
 #import "NSObject+ZHExtension.h"

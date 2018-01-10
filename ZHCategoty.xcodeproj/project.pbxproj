@@ -17,6 +17,7 @@
 		0F602F6C1F0388560025F513 /* NSAttributedString+ZHExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F602F6B1F0388560025F513 /* NSAttributedString+ZHExtension.m */; };
 		0F8AA5391F2F0FE000ABC5C2 /* UINavigationItem+ZHExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F8AA5381F2F0FE000ABC5C2 /* UINavigationItem+ZHExtension.m */; };
 		0F8AA53D1F2F131200ABC5C2 /* UINavigationBar+ZHExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F8AA53C1F2F131200ABC5C2 /* UINavigationBar+ZHExtension.m */; };
+		0F8D321A2005BF960047FB68 /* UITextField+ZHExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F8D32192005BF960047FB68 /* UITextField+ZHExtension.m */; };
 		0F977BE71F332C9F00099C61 /* UIApplication+ZHExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F977BE61F332C9F00099C61 /* UIApplication+ZHExtension.m */; };
 		0F977BEA1F33309B00099C61 /* UIDevice+ZHExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F977BE91F33309B00099C61 /* UIDevice+ZHExtension.m */; };
 		0F9CECD51EFBC24800B8092B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F9CECD41EFBC24800B8092B /* main.m */; };
@@ -72,6 +73,8 @@
 		0F8AA53A1F2F10E900ABC5C2 /* ZHDefineHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZHDefineHeader.h; sourceTree = "<group>"; };
 		0F8AA53B1F2F131100ABC5C2 /* UINavigationBar+ZHExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationBar+ZHExtension.h"; sourceTree = "<group>"; };
 		0F8AA53C1F2F131200ABC5C2 /* UINavigationBar+ZHExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationBar+ZHExtension.m"; sourceTree = "<group>"; };
+		0F8D32182005BF960047FB68 /* UITextField+ZHExtension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITextField+ZHExtension.h"; sourceTree = "<group>"; };
+		0F8D32192005BF960047FB68 /* UITextField+ZHExtension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITextField+ZHExtension.m"; sourceTree = "<group>"; };
 		0F977BE51F332C9F00099C61 /* UIApplication+ZHExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+ZHExtension.h"; sourceTree = "<group>"; };
 		0F977BE61F332C9F00099C61 /* UIApplication+ZHExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+ZHExtension.m"; sourceTree = "<group>"; };
 		0F977BE81F33309B00099C61 /* UIDevice+ZHExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+ZHExtension.h"; sourceTree = "<group>"; };
@@ -199,6 +202,8 @@
 				0F977BE91F33309B00099C61 /* UIDevice+ZHExtension.m */,
 				0F9CEE211EFBC5CB00B8092B /* UIView+ZHExtension.h */,
 				0F9CEE221EFBC5CB00B8092B /* UIView+ZHExtension.m */,
+				0F8D32182005BF960047FB68 /* UITextField+ZHExtension.h */,
+				0F8D32192005BF960047FB68 /* UITextField+ZHExtension.m */,
 				0F602F521F035C5C0025F513 /* UIImage+ZHExtension.h */,
 				0F602F531F035C5C0025F513 /* UIImage+ZHExtension.m */,
 				0F602F551F035FC90025F513 /* UIColor+ZHExtension.h */,
@@ -374,6 +379,7 @@
 				0F9F9FDC1F3D9C97004146D5 /* NSData+ZHExtension.m in Sources */,
 				0F9CEE231EFBC5CB00B8092B /* UIView+ZHExtension.m in Sources */,
 				0F602F571F035FC90025F513 /* UIColor+ZHExtension.m in Sources */,
+				0F8D321A2005BF960047FB68 /* UITextField+ZHExtension.m in Sources */,
 				0F8AA53D1F2F131200ABC5C2 /* UINavigationBar+ZHExtension.m in Sources */,
 				0F9CECE11EFBC24800B8092B /* ZHCategoty.xcdatamodeld in Sources */,
 				0F9CECD81EFBC24800B8092B /* AppDelegate.m in Sources */,

@@ -9,7 +9,7 @@
 #import "ViewController.h"
 #import "ZHCategoryHeader.h"
 
-@interface ViewController ()
+@interface ViewController ()<UITextFieldDelegate>
 
 @end
 
@@ -32,7 +32,6 @@
 //    NSLog(@"--------------------");
 //    NSLog(@"%@",[label.text getLinesArrayWithFont:label.font limitWidth:label.width]);
 //    NSLog(@"--------------------");
-    
 }
 
 

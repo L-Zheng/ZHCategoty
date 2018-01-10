@@ -114,6 +114,33 @@
     return strlength;
 }
 
+- (BOOL)zh_isAllWhitespaceAndNewline{
+//    whitespaceAndNewlineCharacterSet   空格和换行
+//    whitespaceCharacterSet   空格
+    NSString *str = [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    return !str.length;
+}
+
+- (NSString *)zh_hiddenMiddleStr{
+    if (self.length > 2) {
+        //身份证号
+        NSUInteger targetReplaceLocation = 1;
+        NSUInteger targetReplaceLength = self.length - 2;
+        
+        NSMutableString *showText = [NSMutableString stringWithString:self];
+        
+        NSMutableString *replaceString = [NSMutableString stringWithString:@""];
+        for (NSInteger i = 0; i < targetReplaceLength; i ++) {
+            [replaceString appendString:@"*"];
+        }
+        [showText replaceCharactersInRange:NSMakeRange(targetReplaceLocation, targetReplaceLength) withString:replaceString];
+        
+        return showText;
+    }else{
+        return self;
+    }
+}
+
 @end
 
 @implementation NSString (ZHDateExtension)
