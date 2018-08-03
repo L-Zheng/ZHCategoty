@@ -96,8 +96,10 @@
 }
 
 - (NSUInteger)zh_realLength{
-    //去掉空格
+    //过滤字符串前后的空格
     NSString *st = [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    //去掉所有空格
+//    [self stringByReplacingOccurrencesOfString:@" " withString:@""];
     
     char *p = (char *)[st cStringUsingEncoding:NSUnicodeStringEncoding];
     NSUInteger lengthOfBytes = [st lengthOfBytesUsingEncoding:NSUnicodeStringEncoding];
