@@ -10,6 +10,8 @@
 
 @implementation NSDate (ZHExtension)
 
+#pragma mark - public
+
 - (NSString *)stringFromDateFormat:(NSString *)dateFormat{
     //设置区域  @"en_US" @"zh_CH"
     NSLocale *local =[[NSLocale alloc] initWithLocaleIdentifier:@"zh_CH"];
@@ -25,203 +27,240 @@
     return [fmt stringFromDate:self];
 }
 
+//世纪
 - (NSInteger)era{
-    NSDateComponents *components = [[self calendar] components:NSCalendarUnitEra fromDate:self];
-    return [components era];
+    return [Components(self) era];
 }
 
+//年
 - (NSInteger)year{
-    NSDateComponents *components = [[self calendar] components:NSCalendarUnitYear fromDate:self];
-    return [components year];
+    return [Components(self) year];
 }
 
+//月
 - (NSInteger)month{
-    NSDateComponents *components = [[self calendar] components:NSCalendarUnitMonth fromDate:self];
-    return [components month];
+    return [Components(self) month];
 }
 
+//日
 - (NSInteger)day{
-    NSDateComponents *components = [[self calendar] components:NSCalendarUnitDay fromDate:self];
-    return [components day];
+    return [Components(self) day];
 }
 
+//时
 - (NSInteger)hour{
-    NSDateComponents *components = [[self calendar] components:NSCalendarUnitHour fromDate:self];
-    return [components hour];
+    return [Components(self) hour];
 }
 
+//分
 - (NSInteger)minute{
-    NSDateComponents *components = [[self calendar] components:NSCalendarUnitMinute fromDate:self];
-    return [components minute];
+    return [Components(self) minute];
 }
 
+//秒
 - (NSInteger)second{
-    NSDateComponents *components = [[self calendar] components:NSCalendarUnitSecond fromDate:self];
-    return [components second];
+    return [Components(self) second];
 }
 
+//刻钟 （1~4）
+- (NSInteger)quarter{
+    return [Components(self) quarter];
+}
+
+//当前天的起始时间  00：00：00
+- (NSDate *)currentDayStartDate{
+    NSDateComponents *cmps = Components(self);
+    cmps.hour = 0;
+    cmps.minute = 0;
+    cmps.second = 0;
+    return [Calendar() dateFromComponents:cmps];
+}
+
+//当前天的结束时间  23：59：59
+- (NSDate *)currentDayEndDate{
+    NSDateComponents *cmps = Components(self);
+    cmps.hour = 23;
+    cmps.minute = 59;
+    cmps.second = 59;
+    return [Calendar() dateFromComponents:cmps];
+}
+
+//今天的起始时间  00：00：00
++ (NSDate *)toDayStartDate{
+    return [[NSDate date] currentDayStartDate];
+}
+
+//今天的结束时间  23：59：59
++ (NSDate *)toDayEndDate{
+    return [[NSDate date] currentDayEndDate];
+}
+
+//前一天的起始时间  00：00：00
+- (NSDate *)previousDayStartDate{
+    return [NSDate dateWithTimeInterval:-24 * 60 * 60 sinceDate:[self currentDayStartDate]];
+}
+
+//前一天的结束时间  23：59：59
+- (NSDate *)previousDayEndDate{
+    return [NSDate dateWithTimeInterval:-1 sinceDate:[self currentDayStartDate]];
+}
+
+//后一天的起始时间  00：00：00
+- (NSDate *)nextDayStartDate{
+    return [NSDate dateWithTimeInterval:1 sinceDate:[self currentDayEndDate]];
+}
+
+//后一天的结束时间  23：59：59
+- (NSDate *)nextDayEndDate{
+    return [NSDate dateWithTimeInterval:24 * 60 * 60 sinceDate:[self currentDayEndDate]];
+}
+
+//前一天
 - (NSDate *)previousDay{
     NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
     dateComponents.day = -1;
-    NSDate *newDate = [[self calendar] dateByAddingComponents:dateComponents toDate:self options:0];
+    NSDate *newDate = [Calendar() dateByAddingComponents:dateComponents toDate:self options:0];
     return newDate;
 }
 
+//后一天
 - (NSDate *)nextDay{
     NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
     dateComponents.day = +1;
-    NSDate *newDate = [[self calendar] dateByAddingComponents:dateComponents toDate:self options:0];
+    NSDate *newDate = [Calendar() dateByAddingComponents:dateComponents toDate:self options:0];
     return newDate;
 }
 
+//上个月  07~31-->06~30
 - (NSDate *)previousMonth{
     NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
     dateComponents.month = -1;
-    NSDate *newDate = [[self calendar] dateByAddingComponents:dateComponents toDate:self options:0];
+    NSDate *newDate = [Calendar() dateByAddingComponents:dateComponents toDate:self options:0];
     return newDate;
 }
 
+//下个月  08~31-->09~30
 - (NSDate *)nextMonth{
     NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
     dateComponents.month = +1;
-    NSDate *newDate = [[self calendar] dateByAddingComponents:dateComponents toDate:self options:0];
+    NSDate *newDate = [Calendar() dateByAddingComponents:dateComponents toDate:self options:0];
     return newDate;
 }
 
+//上一年
 - (NSDate *)previousYear{
     NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
     dateComponents.year = -1;
-    NSDate *newDate = [[self calendar] dateByAddingComponents:dateComponents toDate:self options:0];
+    NSDate *newDate = [Calendar() dateByAddingComponents:dateComponents toDate:self options:0];
     return newDate;
 }
 
+//下一年
 - (NSDate *)nextYear{
     NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
     dateComponents.year = +1;
-    NSDate *newDate = [[self calendar] dateByAddingComponents:dateComponents toDate:self options:0];
+    NSDate *newDate = [Calendar() dateByAddingComponents:dateComponents toDate:self options:0];
     return newDate;
 }
 
+//本周的第几天（一周起始日：周日） 如 周三 ---> 返回4
 - (NSInteger)weekday{
-    NSDateComponents *components = [[self calendar] components:NSCalendarUnitWeekday fromDate:self];
-    return [components weekday];
+    return [Components(self) weekday];
 }
 
+//本月的第几个7天 （1~7 第一个  8~14 第二个。。。）
 - (NSInteger)weekdayOrdinal{
-    NSDateComponents *components = [[self calendar] components:NSCalendarUnitWeekdayOrdinal fromDate:self];
-    return [components weekdayOrdinal];
+    return [Components(self) weekdayOrdinal];
 }
 
+//本月月包含几周 (<=6)
 - (NSInteger)weekOfMonth{
-    NSDateComponents *components = [[self calendar] components:NSCalendarUnitWeekOfMonth fromDate:self];
-    return [components weekOfMonth];
+    return [Components(self) weekOfMonth];
 }
 
+//本年包含几周 (<=53)
 - (NSInteger)weekOfYear{
-    NSDateComponents *components = [[self calendar] components:NSCalendarUnitWeekOfYear fromDate:self];
-    return [components weekOfYear];
+    return [Components(self) weekOfYear];
 }
 
 - (NSInteger)yearForWeekOfYear{
-    NSDateComponents *components = [[self calendar] components:NSCalendarUnitYearForWeekOfYear fromDate:self];
-    return [components yearForWeekOfYear];
+    return [Components(self) yearForWeekOfYear];
 }
 
+//本月天数
 - (NSInteger)allDaysCountInThisMonth{
-    NSRange totaldaysInMonth = [[self calendar] rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:self];
+    NSRange totaldaysInMonth = [Calendar() rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:self];
     return totaldaysInMonth.length;
 }
 
+//本年天数
 - (NSInteger)allDaysCountInThisYear{
-    NSRange totaldaysInYear = [[self calendar] rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitYear forDate:self];
+    NSRange totaldaysInYear = [Calendar() rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitYear forDate:self];
     return totaldaysInYear.length;
 }
 
+//本月第一天
 - (NSDate *)firstDateInThisMonth{
     NSDateComponents *components = [[NSDateComponents alloc] init];
-    components.calendar = [self calendar];
+    components.calendar = Calendar();
     components.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:8];
     components.year = self.year;
     components.month = self.month;
     components.day = 1;
     
-    NSDate *firstDate = [[self calendar] dateFromComponents:components];
-    
-    return firstDate;
+    return [Calendar() dateFromComponents:components];
 }
 
+// startingDate 距离 self 多少小时
 - (NSInteger)distanceHoursFromDate:(NSDate *)startingDate{
-    NSDateComponents *cmps = [[self calendar] components:NSCalendarUnitHour fromDate:startingDate toDate:self options:0];
-    return cmps.hour;
+    return DistanceComponents(startingDate, self).hour;
 }
 
+// startingDate 距离 self 多少分钟
 - (NSInteger)distanceMinutesFromDate:(NSDate *)startingDate{
-    NSDateComponents *cmps = [[self calendar] components:NSCalendarUnitMinute fromDate:startingDate toDate:self options:0];
-    return cmps.minute;
+    return DistanceComponents(startingDate, self).minute;
 }
 
+// self 距离 现在 多少小时
 - (NSInteger)distanceHoursToNow{
-    NSDateComponents *cmps = [[self calendar] components:NSCalendarUnitHour fromDate:self toDate:[NSDate date] options:0];
-    return cmps.hour;
+    return DistanceComponents(self, [NSDate date]).hour;
 }
 
+// self 距离 现在 多少分钟
 - (NSInteger)distanceMinutesToNow{
-    NSDateComponents *cmps = [[self calendar] components:NSCalendarUnitMinute fromDate:self toDate:[NSDate date] options:0];
-    return cmps.minute;
-}
-
-- (NSDateComponents *)distanceDateComponentsToNow{
-    NSCalendarUnit unit = NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
-    return [[self calendar] components:unit fromDate:self toDate:[NSDate date] options:0];
-    
+    return DistanceComponents(self, [NSDate date]).minute;
 }
 
 - (BOOL)isToday{
-    int unit = NSCalendarUnitDay | NSCalendarUnitMonth |  NSCalendarUnitYear;
-    
-    // 1.获得当前时间的年月日
-    NSDateComponents *nowCmps = [[self calendar] components:unit fromDate:[NSDate date]];
-    
-    // 2.获得self的年月日
-    NSDateComponents *selfCmps = [[self calendar] components:unit fromDate:self];
-    return
-    ((selfCmps.year == nowCmps.year) &&
-     (selfCmps.month == nowCmps.month) &&
-     (selfCmps.day == nowCmps.day));
+    NSDateComponents *nowCmps = Components([NSDate date]);
+    NSDateComponents *selfCmps = Components(self);
+    return ((selfCmps.year == nowCmps.year) && (selfCmps.month == nowCmps.month) && (selfCmps.day == nowCmps.day));
 }
 
 - (BOOL)isYesterday{
-    
-    NSDateComponents *cmps = [[self calendar] components:NSCalendarUnitDay fromDate:self toDate:[NSDate date] options:0];
-    return cmps.day == 1;
+    NSDateComponents *cmps = DistanceComponents(self, [[NSDate date] previousDayEndDate]);
+    if ((cmps.second >= 0) && (cmps.day < 1)) {
+        // cmps.second >= 0  代表  self < previousDayEndDate
+        // cmps.day < 1      代表  self > previousDayStartDate
+        return YES;
+    }else{
+        return NO;
+    }
 }
 
 - (BOOL)isThisMonth{
-    
-    int unit = NSCalendarUnitMonth;
-    
-    // 1.获得当前时间的年月日
-    NSDateComponents *nowCmps = [[self calendar] components:unit fromDate:[NSDate date]];
-    
-    // 2.获得self的年月日
-    NSDateComponents *selfCmps = [[self calendar] components:unit fromDate:self];
-    
-    return nowCmps.month == selfCmps.month;
+    NSDateComponents *nowCmps = Components([NSDate date]);
+    NSDateComponents *selfCmps = Components(self);
+    return (nowCmps.year == selfCmps.year) && (nowCmps.month == selfCmps.month);
 }
 
 - (BOOL)isThisYear{
-    
-    int unit = NSCalendarUnitYear;
-    
-    // 1.获得当前时间的年月日
-    NSDateComponents *nowCmps = [[self calendar] components:unit fromDate:[NSDate date]];
-    
-    // 2.获得self的年月日
-    NSDateComponents *selfCmps = [[self calendar] components:unit fromDate:self];
-    
+    NSDateComponents *nowCmps = Components([NSDate date]);
+    NSDateComponents *selfCmps = Components(self);
     return nowCmps.year == selfCmps.year;
 }
 
+//是否是周末
 - (BOOL)isWeekendDay{
     NSInteger weekDay = [self weekday];
     if (weekDay == 1 || weekDay == 7) {
@@ -231,6 +270,7 @@
     }
 }
 
+//是否是本月的第一天
 - (BOOL)isFirstDayInThisMonth{
     return (self.day == 1);
 }
@@ -239,7 +279,7 @@
 - (NSString *)referenceTimeText{
     if (self.isThisYear) {  //今年
         if (self.isToday) {  //今天
-            NSDateComponents *cmps = [self distanceDateComponentsToNow];
+            NSDateComponents *cmps = DistanceComponents(self, [NSDate date]);
             if (cmps.hour >= 1) { // 至少是1小时前发的
                 return [NSString stringWithFormat:@"%ld小时前", cmps.hour];
             } else if (cmps.minute >= 1) { // 1~59分钟之前发的
@@ -259,7 +299,7 @@
 
 #pragma mark - Private func
 
-- (NSCalendar *)calendar{
+NSCalendar* Calendar(){
     if ([NSCalendar respondsToSelector:@selector(calendarWithIdentifier:)]) {
         //NSCalendarIdentifierGregorian  阳历
         // NSCalendarIdentifierChinese   阴历
@@ -267,5 +307,82 @@
     }
     return [NSCalendar currentCalendar];
 }
+
+NSDateComponents* Components(NSDate *date) {
+    int unit = NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond | NSCalendarUnitWeekday | NSCalendarUnitWeekdayOrdinal | NSCalendarUnitWeekOfMonth | NSCalendarUnitWeekOfYear | NSCalendarUnitQuarter | NSCalendarUnitYearForWeekOfYear;
+    return [Calendar() components:unit fromDate:date];
+}
+
+NSDateComponents* DistanceComponents(NSDate *date1, NSDate *date2) {
+    int unit = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
+    return [Calendar() components:unit fromDate:date1 toDate:date2 options:0];
+}
+
+
+//other
+- (NSString *)referenceTimeText1111{
+    NSDate *todayDate = [NSDate date];
+
+    NSDateComponents *diatanceCmps = DistanceComponents(self, todayDate);
+    if (diatanceCmps.second > 0) {//过去的某个时间
+        if (DistanceComponents(self,[todayDate currentDayStartDate]).second <= 0) {
+            return [NSString stringWithFormat:@"今天--%@",[self stringFromDateFormat:@"yyyy-MM-dd HH:mm:ss"]];
+        }else{//今天以前
+            NSDateComponents *cmps = DistanceComponents(self, [todayDate previousDayEndDate]);
+            if (cmps.day == 0) {
+                return [NSString stringWithFormat:@"昨天--%@",[self stringFromDateFormat:@"yyyy-MM-dd HH:mm:ss"]];
+            }else if (cmps.day == 1){
+                return [NSString stringWithFormat:@"前天--%@",[self stringFromDateFormat:@"yyyy-MM-dd HH:mm:ss"]];
+            }else{
+                return [NSString stringWithFormat:@"%ld天前--%@",cmps.day,[self stringFromDateFormat:@"yyyy-MM-dd HH:mm:ss"]];
+            }
+        }
+    }else if (diatanceCmps.second < 0){ //将来的某个时间
+        if (DistanceComponents(self,[todayDate currentDayEndDate]).second >= 0) {
+            return [NSString stringWithFormat:@"今天--%@",[self stringFromDateFormat:@"yyyy-MM-dd HH:mm:ss"]];
+        }else{//今天以后
+            NSDateComponents *cmps = DistanceComponents([todayDate nextDayStartDate], self);
+            if (cmps.day == 0) {
+                return [NSString stringWithFormat:@"明天--%@",[self stringFromDateFormat:@"yyyy-MM-dd HH:mm:ss"]];
+            }else if (cmps.day == 1){
+                return [NSString stringWithFormat:@"后天--%@",[self stringFromDateFormat:@"yyyy-MM-dd HH:mm:ss"]];
+            }else{
+                return [NSString stringWithFormat:@"%ld天后--%@",cmps.day,[self stringFromDateFormat:@"yyyy-MM-dd HH:mm:ss"]];
+            }
+        }
+    }else{
+        return [NSString stringWithFormat:@"今天--%@",[self stringFromDateFormat:@"yyyy-MM-dd HH:mm:ss"]];
+    }
+}
+
+//按照时间天数进行分组 ---- 一天内的数据为一组
+- (void)tese{
+    NSDate *todayDate = [NSDate date];
+    NSDate *todayStartDate = [todayDate currentDayStartDate];//今天起始时间
+    NSDate *yesterDayEndDate = [todayDate previousDayEndDate];
+    
+    NSArray <NSDate *> *arr = @[[NSDate date],[NSDate dateWithTimeIntervalSinceNow:-60 * 60]];
+    
+    NSMutableArray <NSMutableArray *> *list = [NSMutableArray array];
+    NSMutableArray <NSDate *> *subList = nil;
+    NSInteger dayCount = 0;
+    for (NSDate *date in arr) {
+        //一天内的数据为一组
+        if ([date timeIntervalSinceDate:todayStartDate] >= 0) {//今天
+            if (list.count == 0) {
+                subList = [NSMutableArray array];
+                [list addObject:subList];
+            }
+        }else{//今天以前
+            NSInteger distanceDayCount = DistanceComponents(date, yesterDayEndDate).day;
+            if (distanceDayCount >= dayCount) {
+                subList = [NSMutableArray array];
+                [list addObject:subList];
+                dayCount = distanceDayCount + 1;
+            }
+        }
+    }
+}
+
 
 @end
