@@ -355,30 +355,44 @@ NSDateComponents* DistanceComponents(NSDate *date1, NSDate *date2) {
     }
 }
 
-//按照时间天数进行分组 ---- 一天内的数据为一组
+//按照时间天数进行分组 ---- 一天内的数据为一组  []
 - (void)tese{
     NSDate *todayDate = [NSDate date];
     NSDate *todayStartDate = [todayDate currentDayStartDate];//今天起始时间
     NSDate *yesterDayEndDate = [todayDate previousDayEndDate];
+    NSDate *todayEndDate = [NSDate dateWithTimeInterval:24 * 60 * 60 sinceDate:yesterDayEndDate];
+    NSDate *tomorrowStartDate = [NSDate dateWithTimeInterval:1 sinceDate:todayEndDate];
     
+/////////////////arr里面的时间必须降序排列//////////////
     NSArray <NSDate *> *arr = @[[NSDate date],[NSDate dateWithTimeIntervalSinceNow:-60 * 60]];
+    if (arr.count == 0) return;
     
     NSMutableArray <NSMutableArray *> *list = [NSMutableArray array];
     NSMutableArray <NSDate *> *subList = nil;
-    NSInteger dayCount = 0;
+    NSInteger pastDayCount = 0;
+    NSInteger featureDayCount = DistanceComponents(arr.firstObject,tomorrowStartDate).day;
+    BOOL isHandleTodayData = YES;
     for (NSDate *date in arr) {
         //一天内的数据为一组
-        if ([date timeIntervalSinceDate:todayStartDate] >= 0) {//今天
-            if (list.count == 0) {
+        if ([date timeIntervalSinceDate:todayEndDate] > 0) {//今天以后
+            NSInteger distanceDayCount = DistanceComponents(date, tomorrowStartDate).day;
+            if (distanceDayCount >= featureDayCount) {
                 subList = [NSMutableArray array];
                 [list addObject:subList];
+                featureDayCount = distanceDayCount + 1;
+            }
+        }else if ([date timeIntervalSinceDate:todayStartDate] >= 0){//今天
+            if (isHandleTodayData) {
+                subList = [NSMutableArray array];
+                [list addObject:subList];
+                isHandleTodayData = NO;
             }
         }else{//今天以前
             NSInteger distanceDayCount = DistanceComponents(date, yesterDayEndDate).day;
-            if (distanceDayCount >= dayCount) {
+            if (distanceDayCount >= pastDayCount) {
                 subList = [NSMutableArray array];
                 [list addObject:subList];
-                dayCount = distanceDayCount + 1;
+                pastDayCount = distanceDayCount + 1;
             }
         }
     }

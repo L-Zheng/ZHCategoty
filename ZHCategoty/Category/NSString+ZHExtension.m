@@ -314,6 +314,7 @@
 }
 
 - (BOOL)zh_isAllNumberStr{
+    return ([self stringByTrimmingCharactersInSet:[NSCharacterSet decimalDigitCharacterSet]].length == 0);
     NSString *number =@"0123456789";
     NSCharacterSet * cs =[[NSCharacterSet characterSetWithCharactersInString:number]invertedSet];
     NSString * comparStr = [[self componentsSeparatedByCharactersInSet:cs]componentsJoinedByString:@""];
