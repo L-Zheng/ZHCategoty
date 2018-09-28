@@ -49,6 +49,19 @@
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
+    /** 截取滚动区域
+     UIGraphicsBeginImageContextWithOptions(scrollView.contentSize, NO, 0.0)
+     CGPoint savedContentOffset = scrollView.contentOffset;
+     CGRect savedFrame = scrollView.frame;
+     scrollView.contentOffset = CGPointZero;
+     scrollView.frame = (CGRect){CGPointZero,scrollView.contentSize};
+     [scrollView.layer renderInContext:UIGraphicsGetCurrentContext()];
+     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+     scrollView.contentOffset = savedContentOffset;
+     scrollView.frame = savedFrame;
+     UIGraphicsEndImageContext();
+     */
+    
     return newImage;
 }
 
