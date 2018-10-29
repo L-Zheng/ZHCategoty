@@ -24,4 +24,7 @@
 
 /** 从图片中按指定的位置大小截取图片的一部分 */
 - (UIImage *)imageFromImageInRect:(CGRect)inRect;
+
+/** 拉伸图片中间区域 */
+- (UIImage *)resizedImageCenter;
 @end

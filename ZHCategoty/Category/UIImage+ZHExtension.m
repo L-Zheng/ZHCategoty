@@ -128,4 +128,8 @@
     return newImage;
 }
 
+- (UIImage *)resizedImageCenter{
+    return [self stretchableImageWithLeftCapWidth:self.size.width * 0.5 topCapHeight:self.size.height * 0.5];
+}
+
 @end
