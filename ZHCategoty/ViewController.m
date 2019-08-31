@@ -8,30 +8,21 @@
 
 #import "ViewController.h"
 #import "ZHCategoryHeader.h"
+#import <CoreText/CoreText.h>
 
 @interface ViewController ()<UITextFieldDelegate>
-
+@property (nonatomic,strong) UILabel *label;
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     //依赖#import <CoreText/CoreText.h>框架
-    
-    
-//    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 100, 100, 200)];
-//    label.backgroundColor = [UIColor orangeColor];
-//    label.textColor = [UIColor blackColor];
-//    label.font = [UIFont systemFontOfSize:18];
-//    label.text = @"礼数好了很好；我很烦人哇哦合法；让合肥阿无任何；期货热风";
-//    label.numberOfLines = 0;
-//    [self.view addSubview:label];
-//    
-//    NSLog(@"--------------------");
-//    NSLog(@"%@",[label.text getLinesArrayWithFont:label.font limitWidth:label.width]);
-//    NSLog(@"--------------------");
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
 }
 
 

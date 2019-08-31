@@ -19,6 +19,12 @@
 - (id)zh_utf_8_DicOrArray;
 
 - (UIImage *)zh_image;
+/** 获得gif image */
+- (UIImage *)zh_gifImage;
+/** gif图 */
+- (BOOL)zh_isGifImage;
+/** 图片类型*/
+- (NSString *)zh_imageContentType;
 
 - (NSString *)zh_utf_8_String;
 

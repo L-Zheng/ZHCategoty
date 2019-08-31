@@ -31,6 +31,7 @@
 		0F9CECFC1EFBC24800B8092B /* ZHCategotyUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F9CECFB1EFBC24800B8092B /* ZHCategotyUITests.m */; };
 		0F9CEE231EFBC5CB00B8092B /* UIView+ZHExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F9CEE221EFBC5CB00B8092B /* UIView+ZHExtension.m */; };
 		0F9F9FDC1F3D9C97004146D5 /* NSData+ZHExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F9F9FDB1F3D9C97004146D5 /* NSData+ZHExtension.m */; };
+		85195E28231A417C005FA462 /* UIFont+ZHExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 85195E27231A417C005FA462 /* UIFont+ZHExtension.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,6 +101,8 @@
 		0F9CEE221EFBC5CB00B8092B /* UIView+ZHExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+ZHExtension.m"; sourceTree = "<group>"; };
 		0F9F9FDA1F3D9C97004146D5 /* NSData+ZHExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+ZHExtension.h"; sourceTree = "<group>"; };
 		0F9F9FDB1F3D9C97004146D5 /* NSData+ZHExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+ZHExtension.m"; sourceTree = "<group>"; };
+		85195E26231A417C005FA462 /* UIFont+ZHExtension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIFont+ZHExtension.h"; sourceTree = "<group>"; };
+		85195E27231A417C005FA462 /* UIFont+ZHExtension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIFont+ZHExtension.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,6 +199,8 @@
 			children = (
 				0F602F6D1F038D330025F513 /* ZHCategoryHeader.h */,
 				0F8AA53A1F2F10E900ABC5C2 /* ZHDefineHeader.h */,
+				85195E26231A417C005FA462 /* UIFont+ZHExtension.h */,
+				85195E27231A417C005FA462 /* UIFont+ZHExtension.m */,
 				0F977BE51F332C9F00099C61 /* UIApplication+ZHExtension.h */,
 				0F977BE61F332C9F00099C61 /* UIApplication+ZHExtension.m */,
 				0F977BE81F33309B00099C61 /* UIDevice+ZHExtension.h */,
@@ -319,6 +324,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -376,6 +382,7 @@
 				0F8AA5391F2F0FE000ABC5C2 /* UINavigationItem+ZHExtension.m in Sources */,
 				0F977BEA1F33309B00099C61 /* UIDevice+ZHExtension.m in Sources */,
 				0F113C0B1F0A540400A0C300 /* NSDate+ZHExtension.m in Sources */,
+				85195E28231A417C005FA462 /* UIFont+ZHExtension.m in Sources */,
 				0F9F9FDC1F3D9C97004146D5 /* NSData+ZHExtension.m in Sources */,
 				0F9CEE231EFBC5CB00B8092B /* UIView+ZHExtension.m in Sources */,
 				0F602F571F035FC90025F513 /* UIColor+ZHExtension.m in Sources */,

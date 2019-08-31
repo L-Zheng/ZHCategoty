@@ -90,6 +90,13 @@
     CTFontRef myFont = CTFontCreateWithName((__bridge CFStringRef)([font fontName]), [font pointSize], NULL);
     [attStr addAttribute:(NSString *)kCTFontAttributeName value:(__bridge id)myFont range:NSMakeRange(0, attStr.length)];
     
+    //设置行间距
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+    style.lineSpacing = 10;
+    style.lineHeightMultiple = 1.0;
+    
+    [attStr addAttributes:@{NSParagraphStyleAttributeName : style} range:NSMakeRange(0, attStr.length)];
+    
     //开始计算
     CFRelease(myFont);
     return [attStr zh_getLinesArrayWithLimitWidth:width];

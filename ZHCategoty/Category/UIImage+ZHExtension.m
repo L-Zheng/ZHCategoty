@@ -67,7 +67,8 @@
 
 - (UIImage *)zh_imageScaledToSize:(CGSize)scaledToSize{
     // Create a graphics image context
-    UIGraphicsBeginImageContext(scaledToSize);
+//    UIGraphicsBeginImageContext(scaledToSize);
+    UIGraphicsBeginImageContextWithOptions(scaledToSize, NO, 0.0);
     
     // Tell the old image to draw in this new context, with the desired
     // new size
@@ -114,7 +115,7 @@
     return image;
 }
 
-- (UIImage *)imageFromImageInRect:(CGRect)inRect{
+- (UIImage *)zh_imageFromImageInRect:(CGRect)inRect{
     //将UIImage转换成CGImageRef
     CGImageRef sourceImageRef = [self CGImage];
     
@@ -128,8 +129,7 @@
     return newImage;
 }
 
-- (UIImage *)resizedImageCenter{
+- (UIImage *)zh_resizedImageCenter{
     return [self stretchableImageWithLeftCapWidth:self.size.width * 0.5 topCapHeight:self.size.height * 0.5];
 }
-
 @end

@@ -23,8 +23,8 @@
 + (UIImage *)zh_iconFontImageWithText:(NSString *)text iconsize:(CGFloat)iconsize color:(UIColor *)color;
 
 /** 从图片中按指定的位置大小截取图片的一部分 */
-- (UIImage *)imageFromImageInRect:(CGRect)inRect;
+- (UIImage *)zh_imageFromImageInRect:(CGRect)inRect;
 
 /** 拉伸图片中间区域 */
-- (UIImage *)resizedImageCenter;
+- (UIImage *)zh_resizedImageCenter;
 @end

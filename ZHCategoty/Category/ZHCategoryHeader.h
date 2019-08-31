@@ -22,6 +22,7 @@
 #import "UIApplication+ZHExtension.h"
 #import "UIDevice+ZHExtension.h"
 #import "NSData+ZHExtension.h"
+#import "UIFont+ZHExtension.h"
 
 
 #endif /* ZHCategoryHeader_h */
