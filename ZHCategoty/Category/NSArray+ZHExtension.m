@@ -53,15 +53,11 @@
 @end
 
 @implementation NSArray (ZHLogExtension)
-
-- (NSString *)descriptionWithLocale:(id)locale{
-    NSMutableString *strM = [NSMutableString stringWithString:@"(\n"];
-    
-    [self enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        [strM appendFormat:@"\t%@,\n", obj];
-    }];
-    [strM appendString:@")"];
-    return strM;
+- (NSString *)descriptionWithLocale:(nullable id)locale{
+    return [self descriptionWithLocale:locale indent:1];
+}
+- (NSString *)descriptionWithLocale:(nullable id)locale indent:(NSUInteger)level{
+    return [self zh_descriptionWithLocale:locale indent:level];
 }
 @end
 

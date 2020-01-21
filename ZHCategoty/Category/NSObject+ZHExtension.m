@@ -10,7 +10,90 @@
 #import <objc/runtime.h>
 
 @implementation NSObject (ZHExtension)
+@end
 
+@implementation NSObject (ZHLogExtension)
+- (NSString *)zh_descriptionWithLocale:(nullable id)locale indent:(NSUInteger)level{
+    
+    BOOL (^conditionArr)(id) = ^(id obj){
+        return [obj isKindOfClass:[NSArray class]];
+    };
+    BOOL (^conditionDic)(id) = ^(id obj){
+        return [obj isKindOfClass:[NSDictionary class]];
+    };
+    
+    BOOL isArr = conditionArr(self);
+    BOOL isDic = conditionDic(self);
+    
+    if (!isArr && !isDic) {
+        return nil;
+    }
+    
+    //解析value to string
+    NSString * (^parseObj)(id, NSUInteger) = ^(id obj, NSUInteger level){
+        NSString *value = @"";
+        if ([obj isKindOfClass:[NSString class]]) {
+            value = [NSString stringWithFormat:@"\"%@\",\n", obj];
+        }else if ([obj isEqual:[NSNull null]]) {
+            value = @"\"<null>\",\n";
+        }else if (conditionDic(obj)){
+            value = [NSString stringWithFormat:@"%@,\n", [(NSDictionary *)obj descriptionWithLocale:locale indent:level]];
+        }else if (conditionArr(obj)) {
+            value = [NSString stringWithFormat:@"%@,\n", [(NSArray *)obj descriptionWithLocale:locale indent:level]];
+        }else {
+            value = [NSString stringWithFormat:@"%@,\n", obj];
+        }
+        return value;
+    };
+    
+    NSString *startKey = isArr ? @"[" : @"{";
+    NSString *endKey = isArr ? @"]" : @"}";
+    
+    //开始字符
+    NSMutableString *strM = [@"" mutableCopy];
+    [strM appendFormat:@"%@\n", startKey];
+    
+    //空格
+    NSMutableString *lastSpace = [@"" mutableCopy];
+    NSMutableString *space = [@"" mutableCopy];
+    if (level > 0) {
+        for (int i = 0; i < level - 1; i++) {
+            [lastSpace appendString:@"\t"];
+        }
+        [space appendString:lastSpace];
+        [space appendString:@"\t"];
+    }
+    
+    //遍历取值
+    if (isArr) {
+        [(NSArray *)self enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            [strM appendString:space];
+            [strM appendString:parseObj(obj, level + 1)];
+        }];
+    }else{
+        [(NSDictionary *)self enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+            [strM appendString:space];
+            [strM appendFormat:@"\"%@\"", key];
+            [strM appendString:@" : "];
+            [strM appendString:parseObj(obj, level + 1)];
+        }];
+    }
+    
+    //结束字符
+    [strM appendString:lastSpace];
+    [strM appendString:endKey];
+    if (level == 1) {
+        [strM appendString:@"\n"];
+    }
+    
+    // 删除最后一个逗号
+    NSRange range = [strM rangeOfString:@"," options:NSBackwardsSearch];
+    if (range.location != NSNotFound){
+        [strM deleteCharactersInRange:range];
+    }
+    
+    return strM;
+}
 @end
 
 @implementation NSObject (ZHRuntimeExtension)

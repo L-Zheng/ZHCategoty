@@ -12,6 +12,10 @@
 
 @end
 
+@interface NSObject (ZHLogExtension)
+- (NSString *)zh_descriptionWithLocale:(nullable id)locale indent:(NSUInteger)level;
+@end
+
 @interface NSObject (ZHRuntimeExtension)
 
 /** 交换类方法 */
