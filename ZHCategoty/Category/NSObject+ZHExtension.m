@@ -35,7 +35,7 @@
         if ([obj isKindOfClass:[NSString class]]) {
             value = [NSString stringWithFormat:@"\"%@\",\n", obj];
         }else if ([obj isEqual:[NSNull null]]) {
-            value = @"\"<null>\",\n";
+            value = @"null,\n";
         }else if (conditionDic(obj)){
             value = [NSString stringWithFormat:@"%@,\n", [(NSDictionary *)obj descriptionWithLocale:locale indent:level]];
         }else if (conditionArr(obj)) {
