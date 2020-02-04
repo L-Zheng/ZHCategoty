@@ -30,7 +30,7 @@
     }
     
     //解析value to string
-    NSString * (^parseObj)(id, NSUInteger) = ^(id obj, NSUInteger level){
+    NSString * (^parseObj)(NSObject *, NSUInteger) = ^(NSObject *obj, NSUInteger level){
         NSString *value = @"";
         if ([obj isKindOfClass:[NSString class]]) {
             value = [NSString stringWithFormat:@"\"%@\",\n", obj];
@@ -41,7 +41,7 @@
         }else if (conditionArr(obj)) {
             value = [NSString stringWithFormat:@"%@,\n", [(NSArray *)obj descriptionWithLocale:locale indent:level]];
         }else {
-            value = [NSString stringWithFormat:@"%@,\n", obj];
+            value = [NSString stringWithFormat:@"%@,\n", obj.description];
         }
         return value;
     };
