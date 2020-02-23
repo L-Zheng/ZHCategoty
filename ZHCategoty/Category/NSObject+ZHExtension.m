@@ -40,8 +40,10 @@
             value = [NSString stringWithFormat:@"%@,\n", [(NSDictionary *)obj descriptionWithLocale:locale indent:level]];
         }else if (conditionArr(obj)) {
             value = [NSString stringWithFormat:@"%@,\n", [(NSArray *)obj descriptionWithLocale:locale indent:level]];
-        }else {
+        }else if ([obj isKindOfClass:[NSObject class]]) {
             value = [NSString stringWithFormat:@"%@,\n", obj.description];
+        }else {
+            value = [NSString stringWithFormat:@"%@,\n", obj];
         }
         return value;
     };
