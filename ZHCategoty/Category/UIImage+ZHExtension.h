@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <WebKit/WebKit.h>
 
 @interface UIImage (ZHExtension)
 
@@ -15,6 +16,9 @@
 
 /** 截图View */
 + (UIImage *)zh_captureImageWithView:(UIView *)view;
++ (UIImage *)zh_captureImageWithUIScrollView:(UIScrollView *)scrollView isAll:(BOOL)isAll;
++ (UIImage *)zh_captureImageWithUIWebView:(UIWebView *)webView isAll:(BOOL)isAll;
++ (void)zh_captureImageWithWKWebView:(WKWebView *)webView isAll:(BOOL)isAll completion:(void (^) (UIImage *image))completion;
 
 /** 压缩到制定尺寸 */
 - (UIImage *)zh_imageScaledToSize:(CGSize)scaledToSize;

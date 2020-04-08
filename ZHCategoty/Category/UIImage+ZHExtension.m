@@ -36,11 +36,30 @@
     return image;
 }
 
+
 + (UIImage *)zh_captureImageWithView:(UIView *)view{
+    if (!view) return nil;
+    if ([view isKindOfClass:[UIScrollView class]]) {
+        return [self zh_captureImageWithUIScrollView:(UIScrollView *)view isAll:NO];
+    }
+    if ([view isKindOfClass:[UIWebView class]]) {
+        return [self zh_captureImageWithUIScrollView:[(UIWebView *)view scrollView] isAll:NO];
+    }
+    if ([view isKindOfClass:[WKWebView class]]) {
+        __block UIImage *res = nil;
+        [self zh_captureImageWithWKWebView:(WKWebView *)view isAll:NO completion:^(UIImage *image) {
+            res = image;
+        }];
+        return res;
+    }
+    return [self zhIn_captureImageWithView:view];
+}
++ (UIImage *)zhIn_captureImageWithView:(UIView *)view{
     //  可截取任何UIView的视图  即使没有显示在屏幕上也可截取
     
     // 1.创建bitmap上下文
     //    UIGraphicsBeginImageContext(view.frame.size);//这种方式的截图不清晰
+    //  YES:透明   NO：不透明
     UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, 0.0);//这种方式的截图清晰
     // 2.将要保存的view的layer绘制到bitmap上下文中
     [view.layer renderInContext:UIGraphicsGetCurrentContext()];
@@ -64,6 +83,103 @@
     
     return newImage;
 }
+
++ (UIImage *)zh_captureImageWithUIScrollView:(UIScrollView *)scrollView isAll:(BOOL)isAll{
+    if (!isAll) {
+        return [self zh_captureImageWithView:scrollView];
+    }
+    
+    CGPoint originOffset = scrollView.contentOffset;
+    CGRect originFrame = scrollView.frame;
+
+    scrollView.contentOffset = CGPointZero;
+    scrollView.frame = CGRectMake(0, 0, scrollView.contentSize.width, scrollView.contentSize.height);
+
+    UIGraphicsBeginImageContextWithOptions(scrollView.contentSize, NO, UIScreen.mainScreen.scale);
+    [scrollView.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    scrollView.contentOffset = originOffset;
+    scrollView.frame = originFrame;
+    
+    return snapshotImage;
+}
++ (UIImage *)zh_captureImageWithUIWebView:(UIWebView *)webView isAll:(BOOL)isAll{
+    return [self zh_captureImageWithUIScrollView:webView.scrollView isAll:isAll];
+}
++ (void)zh_captureImageWithWKWebView:(WKWebView *)webView isAll:(BOOL)isAll completion:(void (^) (UIImage *image))completion{
+    if (!isAll) {
+        UIGraphicsBeginImageContextWithOptions(webView.bounds.size, NO, UIScreen.mainScreen.scale);
+        [webView drawViewHierarchyInRect:webView.bounds afterScreenUpdates:YES];
+        UIImage *snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        if (completion) completion(snapshotImage);
+        return;
+    }
+    
+    //获取快照【防止截图时对 frame 进行操作 出现的闪屏等现象】
+    UIView *snapshotView = [webView snapshotViewAfterScreenUpdates:YES];
+    snapshotView.frame = webView.frame;
+    //添加快照
+    [webView.superview addSubview:snapshotView];
+    
+    //保留WebView原始位置
+    CGPoint originOffset = webView.scrollView.contentOffset;
+    CGRect originFrame = webView.frame;
+    UIView *originSuperView = webView.superview;
+    NSUInteger originIndex = [webView.superview.subviews indexOfObject:webView];
+    
+    //创建临时视图 用于截图
+    UIView *containerView = [[UIView alloc] initWithFrame:webView.bounds];
+    [webView removeFromSuperview];
+    [containerView addSubview:webView];
+    
+    //获取WebView内容大小，分页数
+    CGSize totalSize = webView.scrollView.contentSize;
+    NSInteger page = ceil(totalSize.height / containerView.bounds.size.height);
+    
+    //设置从0位置开始截图
+    webView.scrollView.contentOffset = CGPointZero;
+    webView.frame = CGRectMake(0, 0, containerView.bounds.size.width, webView.scrollView.contentSize.height);
+    
+    //开始截图
+    UIGraphicsBeginImageContextWithOptions(totalSize, NO, UIScreen.mainScreen.scale);
+    
+    [self zhIn_captureImageWithWKWebView:webView containerView:containerView index:0 maxIndex:page completion:^{
+        //截图
+        UIImage *snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        //还原webview位置
+        [webView removeFromSuperview];
+        [originSuperView insertSubview:webView atIndex:originIndex];
+        webView.frame = originFrame;
+        webView.scrollView.contentOffset = originOffset;
+        
+        //移除快照
+        [snapshotView removeFromSuperview];
+        
+        if (completion) completion(snapshotImage);
+    }];
+}
++ (void)zhIn_captureImageWithWKWebView:(WKWebView *)webView containerView:(UIView *)containerView index:(NSUInteger)index maxIndex:(NSUInteger)maxIndex completion:(void (^) (void))completion{
+    CGFloat Y = index * containerView.frame.size.height;
+    CGRect splitFrame = (CGRect){{0, Y}, containerView.bounds.size};
+    webView.frame = (CGRect){{0, -Y}, webView.bounds.size};
+    
+    //屏幕刷新频率  60Hz  大概不到0.02秒
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.02 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [containerView drawViewHierarchyInRect:splitFrame afterScreenUpdates:YES];
+        if (index < maxIndex) {
+            [self zhIn_captureImageWithWKWebView:webView containerView:containerView index:index + 1 maxIndex:maxIndex completion:completion];
+            return;
+        }
+        if (completion) completion();
+    });
+}
+
+
 
 - (UIImage *)zh_imageScaledToSize:(CGSize)scaledToSize{
     // Create a graphics image context
