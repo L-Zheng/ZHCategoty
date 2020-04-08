@@ -15,6 +15,7 @@
 + (UIImage *)zh_imageWithColor:(UIColor *)color size:(CGSize)size;
 
 /** 截图View */
++ (UIImage *)zh_captureImageWithViewAndSubViews:(UIView *)view;
 + (UIImage *)zh_captureImageWithView:(UIView *)view;
 + (UIImage *)zh_captureImageWithUIScrollView:(UIScrollView *)scrollView isAll:(BOOL)isAll;
 + (UIImage *)zh_captureImageWithUIWebView:(UIWebView *)webView isAll:(BOOL)isAll;

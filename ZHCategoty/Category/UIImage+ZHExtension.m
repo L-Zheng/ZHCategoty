@@ -36,6 +36,43 @@
     return image;
 }
 
++ (UIImage *)zh_captureImageWithViewAndSubViews:(UIView *)view{
+    if (!view) return nil;
+    //处理subViews
+    NSMutableArray *addImageViews = [NSMutableArray array];
+    [self zh_handleSubViewsWhenCapture:view addImageViews:addImageViews];
+    //截图
+    UIImage *resImage = [self zhIn_captureImageWithView:view];
+    
+    for (UIImageView *imageView in addImageViews) {
+        [imageView removeFromSuperview];
+    }
+    
+    return resImage;
+}
++ (void)zh_handleSubViewsWhenCapture:(UIView *)view addImageViews:(NSMutableArray *)addImageViews{
+    if (!view || view.subviews.count == 0) return;
+    NSArray *subviews = view.subviews;
+    for (UIView *temp in subviews) {
+        if (temp.subviews.count > 0) {
+            [self zh_handleSubViewsWhenCapture:temp addImageViews:addImageViews];
+            continue;
+        }
+        if (![temp isKindOfClass:[WKWebView class]]) continue;
+        
+        __block UIImage *res = nil;
+        [self zh_captureImageWithWKWebView:(WKWebView *)temp isAll:NO completion:^(UIImage *image) {
+            res = image;
+        }];
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:temp.bounds];
+        imageView.backgroundColor = [UIColor whiteColor];
+        imageView.contentMode = UIViewContentModeScaleAspectFill;
+        imageView.image = res;
+        [temp addSubview:imageView];
+        [temp sendSubviewToBack:imageView];
+        [addImageViews addObject:imageView];
+    }
+}
 
 + (UIImage *)zh_captureImageWithView:(UIView *)view{
     if (!view) return nil;
@@ -43,7 +80,7 @@
         return [self zh_captureImageWithUIScrollView:(UIScrollView *)view isAll:NO];
     }
     if ([view isKindOfClass:[UIWebView class]]) {
-        return [self zh_captureImageWithUIScrollView:[(UIWebView *)view scrollView] isAll:NO];
+        return [self zh_captureImageWithUIWebView:(UIWebView *)view isAll:NO];
     }
     if ([view isKindOfClass:[WKWebView class]]) {
         __block UIImage *res = nil;
@@ -54,39 +91,10 @@
     }
     return [self zhIn_captureImageWithView:view];
 }
-+ (UIImage *)zhIn_captureImageWithView:(UIView *)view{
-    //  可截取任何UIView的视图  即使没有显示在屏幕上也可截取
-    
-    // 1.创建bitmap上下文
-    //    UIGraphicsBeginImageContext(view.frame.size);//这种方式的截图不清晰
-    //  YES:透明   NO：不透明
-    UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, 0.0);//这种方式的截图清晰
-    // 2.将要保存的view的layer绘制到bitmap上下文中
-    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
-    
-    // 3.取出绘制号的图片
-    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    /** 截取滚动区域
-     UIGraphicsBeginImageContextWithOptions(scrollView.contentSize, NO, 0.0)
-     CGPoint savedContentOffset = scrollView.contentOffset;
-     CGRect savedFrame = scrollView.frame;
-     scrollView.contentOffset = CGPointZero;
-     scrollView.frame = (CGRect){CGPointZero,scrollView.contentSize};
-     [scrollView.layer renderInContext:UIGraphicsGetCurrentContext()];
-     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-     scrollView.contentOffset = savedContentOffset;
-     scrollView.frame = savedFrame;
-     UIGraphicsEndImageContext();
-     */
-    
-    return newImage;
-}
 
 + (UIImage *)zh_captureImageWithUIScrollView:(UIScrollView *)scrollView isAll:(BOOL)isAll{
     if (!isAll) {
-        return [self zh_captureImageWithView:scrollView];
+        return [self zhIn_captureImageWithView:scrollView];
     }
     
     CGPoint originOffset = scrollView.contentOffset;
@@ -163,23 +171,6 @@
         if (completion) completion(snapshotImage);
     }];
 }
-+ (void)zhIn_captureImageWithWKWebView:(WKWebView *)webView containerView:(UIView *)containerView index:(NSUInteger)index maxIndex:(NSUInteger)maxIndex completion:(void (^) (void))completion{
-    CGFloat Y = index * containerView.frame.size.height;
-    CGRect splitFrame = (CGRect){{0, Y}, containerView.bounds.size};
-    webView.frame = (CGRect){{0, -Y}, webView.bounds.size};
-    
-    //屏幕刷新频率  60Hz  大概不到0.02秒
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.02 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [containerView drawViewHierarchyInRect:splitFrame afterScreenUpdates:YES];
-        if (index < maxIndex) {
-            [self zhIn_captureImageWithWKWebView:webView containerView:containerView index:index + 1 maxIndex:maxIndex completion:completion];
-            return;
-        }
-        if (completion) completion();
-    });
-}
-
-
 
 - (UIImage *)zh_imageScaledToSize:(CGSize)scaledToSize{
     // Create a graphics image context
@@ -247,5 +238,39 @@
 
 - (UIImage *)zh_resizedImageCenter{
     return [self stretchableImageWithLeftCapWidth:self.size.width * 0.5 topCapHeight:self.size.height * 0.5];
+}
+
+#pragma mark - private
+
++ (UIImage *)zhIn_captureImageWithView:(UIView *)view{
+    //  可截取任何UIView的视图  即使没有显示在屏幕上也可截取
+    
+    // 1.创建bitmap上下文
+    //    UIGraphicsBeginImageContext(view.frame.size);//这种方式的截图不清晰
+    //  YES:透明   NO：不透明
+    UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, 0.0);//这种方式的截图清晰
+    // 2.将要保存的view的layer绘制到bitmap上下文中
+    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
+    
+    // 3.取出绘制号的图片
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
++ (void)zhIn_captureImageWithWKWebView:(WKWebView *)webView containerView:(UIView *)containerView index:(NSUInteger)index maxIndex:(NSUInteger)maxIndex completion:(void (^) (void))completion{
+    CGFloat Y = index * containerView.frame.size.height;
+    CGRect splitFrame = (CGRect){{0, Y}, containerView.bounds.size};
+    webView.frame = (CGRect){{0, -Y}, webView.bounds.size};
+    
+    //屏幕刷新频率  60Hz  大概不到0.02秒
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.02 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [containerView drawViewHierarchyInRect:splitFrame afterScreenUpdates:YES];
+        if (index < maxIndex) {
+            [self zhIn_captureImageWithWKWebView:webView containerView:containerView index:index + 1 maxIndex:maxIndex completion:completion];
+            return;
+        }
+        if (completion) completion();
+    });
 }
 @end
