@@ -67,10 +67,18 @@
     }
     
     //解析value to string
-    NSString * (^parseObj)(NSObject *, NSUInteger) = ^(NSObject *obj, NSUInteger level){
+    NSString * (^parseObj)(id, NSUInteger) = ^(id obj, NSUInteger level){
         NSString *value = @"";
         if ([obj isKindOfClass:[NSString class]]) {
             value = [NSString stringWithFormat:@"\"%@\",\n", obj];
+        }else if ([obj isKindOfClass:[NSNumber class]]){
+            if ([obj isEqualToNumber:@(YES)]) {
+                value = @"true,\n";
+            }else if ([obj isEqualToNumber:@(NO)]){
+                value = @"false,\n";
+            }else{
+                value = [NSString stringWithFormat:@"%@,\n", [(NSNumber *)obj description]];
+            }
         }else if ([obj isEqual:[NSNull null]]) {
             value = @"null,\n";
         }else if (conditionDic(obj)){
@@ -78,7 +86,7 @@
         }else if (conditionArr(obj)) {
             value = [NSString stringWithFormat:@"%@,\n", [(NSArray *)obj descriptionWithLocale:locale indent:level]];
         }else if ([obj isKindOfClass:[NSObject class]]) {
-            value = [NSString stringWithFormat:@"%@,\n", obj.description];
+            value = [NSString stringWithFormat:@"%@,\n", [(NSObject *)obj description]];
         }else {
             value = [NSString stringWithFormat:@"%@,\n", obj];
         }
