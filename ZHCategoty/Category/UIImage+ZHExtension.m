@@ -36,12 +36,21 @@
     return image;
 }
 
-+ (UIImage *)zh_captureImageWithViewAndSubViews:(UIView *)view{
++ (UIImage *)zh_captureImageWithView:(UIView *)view{
     if (!view) return nil;
+    
+    if ([view isKindOfClass:[WKWebView class]]) {
+        __block UIImage *res = nil;
+        [self zh_captureImageWithWKWebView:(WKWebView *)view isAll:NO completion:^(UIImage *image) {
+            res = image;
+        }];
+        return res;
+    }
+    
     //处理subViews
     NSMutableArray *addImageViews = [NSMutableArray array];
-    [self zh_handleSubViewsWhenCapture:view addImageViews:addImageViews];
-    //截图
+    [self zhIn_handleSubViewsWhenCapture:view addImageViews:addImageViews];
+    
     UIImage *resImage = [self zhIn_captureImageWithView:view];
     
     for (UIImageView *imageView in addImageViews) {
@@ -50,48 +59,6 @@
     
     return resImage;
 }
-+ (void)zh_handleSubViewsWhenCapture:(UIView *)view addImageViews:(NSMutableArray *)addImageViews{
-    if (!view || view.subviews.count == 0) return;
-    NSArray *subviews = view.subviews;
-    for (UIView *temp in subviews) {
-        if (temp.subviews.count > 0) {
-            [self zh_handleSubViewsWhenCapture:temp addImageViews:addImageViews];
-            continue;
-        }
-        if (![temp isKindOfClass:[WKWebView class]]) continue;
-        
-        __block UIImage *res = nil;
-        [self zh_captureImageWithWKWebView:(WKWebView *)temp isAll:NO completion:^(UIImage *image) {
-            res = image;
-        }];
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:temp.bounds];
-        imageView.backgroundColor = [UIColor whiteColor];
-        imageView.contentMode = UIViewContentModeScaleAspectFill;
-        imageView.image = res;
-        [temp addSubview:imageView];
-        [temp sendSubviewToBack:imageView];
-        [addImageViews addObject:imageView];
-    }
-}
-
-+ (UIImage *)zh_captureImageWithView:(UIView *)view{
-    if (!view) return nil;
-    if ([view isKindOfClass:[UIScrollView class]]) {
-        return [self zh_captureImageWithUIScrollView:(UIScrollView *)view isAll:NO];
-    }
-    if ([view isKindOfClass:[UIWebView class]]) {
-        return [self zh_captureImageWithUIWebView:(UIWebView *)view isAll:NO];
-    }
-    if ([view isKindOfClass:[WKWebView class]]) {
-        __block UIImage *res = nil;
-        [self zh_captureImageWithWKWebView:(WKWebView *)view isAll:NO completion:^(UIImage *image) {
-            res = image;
-        }];
-        return res;
-    }
-    return [self zhIn_captureImageWithView:view];
-}
-
 + (UIImage *)zh_captureImageWithUIScrollView:(UIScrollView *)scrollView isAll:(BOOL)isAll{
     if (!isAll) {
         return [self zhIn_captureImageWithView:scrollView];
@@ -272,5 +239,32 @@
         }
         if (completion) completion();
     });
+}
+
++ (void)zhIn_handleSubViewsWhenCapture:(UIView *)view addImageViews:(NSMutableArray *)addImageViews{
+    if (!view || view.subviews.count == 0) return;
+        
+    NSArray *subviews = view.subviews;
+    for (UIView *temp in subviews) {
+        if ([temp isKindOfClass:[WKWebView class]]) {
+            __block UIImage *res = nil;
+            [self zh_captureImageWithWKWebView:(WKWebView *)temp isAll:NO completion:^(UIImage *image) {
+                res = image;
+            }];
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:temp.frame];
+            imageView.backgroundColor = [UIColor whiteColor];
+            imageView.contentMode = UIViewContentModeScaleAspectFill;
+            imageView.image = res;
+            
+            NSInteger index = [temp.superview.subviews indexOfObject:temp];
+            [temp.superview insertSubview:imageView atIndex:index + 1];
+            [addImageViews addObject:imageView];
+            continue;
+        }
+        if (temp.subviews.count > 0) {
+            [self zhIn_handleSubViewsWhenCapture:temp addImageViews:addImageViews];
+            continue;
+        }
+    }
 }
 @end

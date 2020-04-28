@@ -9,6 +9,10 @@
 #ifndef ZHDefineHeader_h
 #define ZHDefineHeader_h
 
+//__VA_ARGS__ 是一个可变参数的宏，实际实现方式就是参数列表的最后一个参数为省略号（也就是三个点）
+//##__VA_ARGS__  当可变参数的个数为0时，这里的##起到把前面多余的","去掉的作用,否则会编译出错
+#define ZHLog(s,...)   NSLog(@"%s第(%d)行:%@",__FUNCTION__,__LINE__,[NSString stringWithFormat:(s),##__VA_ARGS__])
+
 
 #pragma mark - Version
 
