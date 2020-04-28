@@ -16,9 +16,10 @@
 
 @end
 
+#ifdef DEBUG
 @interface NSDictionary (ZHLogExtension)
-
 @end
+#endif
 
 @interface NSDictionary (ZHConvertExtension)
 

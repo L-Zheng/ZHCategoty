@@ -12,8 +12,23 @@
 @implementation NSObject (ZHExtension)
 @end
 
+#ifdef DEBUG
 @implementation NSObject (ZHLogExtension)
 - (NSString *)zh_descriptionWithLocale:(nullable id)locale indent:(NSUInteger)level{
+    /**
+     ❌数据嵌套时：函数会递归调用 栈内存溢出
+     防止栈内存溢出： 1、函数内尽量避免定义变量  限制调用层级
+                  2、使用尾递归调用，编译器会进行优化处理，复用函数栈帧【该方式只在release下有效】
+                  3、使用while循环：函数运行所需的数据，均已函数参数形式传递，每次调用的结果传入下一参数【只适用于层层向里调用，不适用于调完又拐回来的情况】如：在遍历NSDictionary时，必须等待ZHLogParseObj函数执行完，再回来才能继续遍历下一个key
+                     [(NSDictionary *)self enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+                         [strM appendString:space];
+                         [strM appendFormat:@"\"%@\"", key];
+                         [strM appendString:@" : "];
+                         [strM appendString:ZHLogParseObj(locale, obj, level + 1)];
+                     }];
+                                                            
+     栈内存溢出情况：在打印JS的this对象时出现 -->  console.log(this);，其它情况暂时没有出现
+     */
     
     BOOL (^conditionArr)(id) = ^(id obj){
         return [obj isKindOfClass:[NSArray class]];
@@ -27,6 +42,28 @@
     
     if (!isArr && !isDic) {
         return nil;
+    }
+    
+    NSString *startKey = isArr ? @"[" : @"{";
+    NSString *endKey = isArr ? @"]" : @"}";
+    
+//    if (level > 50) {
+//        return [NSString stringWithFormat:@"%@...(数据层级太深，不予显示)%@", startKey, endKey];
+//    }
+    
+    //开始字符
+    NSMutableString *strM = [@"" mutableCopy];
+    [strM appendFormat:@"%@\n", startKey];
+    
+    //空格
+    NSMutableString *lastSpace = [@"" mutableCopy];
+    NSMutableString *space = [@"" mutableCopy];
+    if (level > 0) {
+        for (int i = 0; i < level - 1; i++) {
+            [lastSpace appendString:@"\t"];
+        }
+        [space appendString:lastSpace];
+        [space appendString:@"\t"];
     }
     
     //解析value to string
@@ -47,24 +84,6 @@
         }
         return value;
     };
-    
-    NSString *startKey = isArr ? @"[" : @"{";
-    NSString *endKey = isArr ? @"]" : @"}";
-    
-    //开始字符
-    NSMutableString *strM = [@"" mutableCopy];
-    [strM appendFormat:@"%@\n", startKey];
-    
-    //空格
-    NSMutableString *lastSpace = [@"" mutableCopy];
-    NSMutableString *space = [@"" mutableCopy];
-    if (level > 0) {
-        for (int i = 0; i < level - 1; i++) {
-            [lastSpace appendString:@"\t"];
-        }
-        [space appendString:lastSpace];
-        [space appendString:@"\t"];
-    }
     
     //遍历取值
     if (isArr) {
@@ -97,6 +116,7 @@
     return strM;
 }
 @end
+#endif
 
 @implementation NSObject (ZHRuntimeExtension)
 

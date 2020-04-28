@@ -52,6 +52,7 @@
 
 @end
 
+#ifdef DEBUG
 @implementation NSArray (ZHLogExtension)
 - (NSString *)descriptionWithLocale:(nullable id)locale{
     return [self descriptionWithLocale:locale indent:1];
@@ -60,6 +61,7 @@
     return [self zh_descriptionWithLocale:locale indent:level];
 }
 @end
+#endif
 
 @implementation NSArray (ZHConvertExtension)
 

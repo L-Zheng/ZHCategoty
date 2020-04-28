@@ -20,9 +20,10 @@
 
 @end
 
+#ifdef DEBUG
 @interface NSArray (ZHLogExtension)
-
 @end
+#endif
 
 @interface NSArray (ZHConvertExtension)
 
