@@ -16,7 +16,9 @@
 @implementation NSObject (ZHLogExtension)
 - (NSString *)zh_descriptionWithLocale:(nullable id)locale indent:(NSUInteger)level{
     /**
-     ❌数据嵌套时：函数会递归调用 栈内存溢出
+     ❌DEBUG下：数据嵌套时：函数会递归调用 栈内存溢出
+     DEBUG下：栈内存溢出情况：在打印JS的this对象时出现 -->  console.log(this);，其它情况暂时没有出现
+     
      防止栈内存溢出： 1、函数内尽量避免定义变量  限制调用层级
                   2、使用尾递归调用，编译器会进行优化处理，复用函数栈帧【该方式只在release下有效】
                   3、使用while循环：函数运行所需的数据，均已函数参数形式传递，每次调用的结果传入下一参数【只适用于层层向里调用，不适用于调完又拐回来的情况】如：在遍历NSDictionary时，必须等待ZHLogParseObj函数执行完，再回来才能继续遍历下一个key
@@ -26,8 +28,6 @@
                          [strM appendString:@" : "];
                          [strM appendString:ZHLogParseObj(locale, obj, level + 1)];
                      }];
-                                                            
-     栈内存溢出情况：在打印JS的this对象时出现 -->  console.log(this);，其它情况暂时没有出现
      */
     
     BOOL (^conditionArr)(id) = ^(id obj){
