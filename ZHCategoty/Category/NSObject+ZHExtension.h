@@ -14,6 +14,7 @@
 
 #ifdef DEBUG
 @interface NSObject (ZHLogExtension)
+- (NSString *)zh_descriptionWithLocale1:(nullable id)locale indent:(NSUInteger)level;
 - (NSString *)zh_descriptionWithLocale:(nullable id)locale indent:(NSUInteger)level;
 @end
 #endif
