@@ -14,6 +14,7 @@
 
 #ifdef DEBUG
 @implementation NSObject (ZHLogExtension)
+//可以使用系统的函数对json数据格式化  但这只适用于基本数据，如果json里面包含有原生的Object对象，会崩溃
 - (NSString *)zh_descriptionWithLocale1:(nullable id)locale indent:(NSUInteger)level{
     NSError *jsonError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:self options:NSJSONWritingPrettyPrinted error:&jsonError];
@@ -35,13 +36,12 @@ __attribute__((unused)) static NSString * ZHLogParseObj(id obj, id locale, NSUIn
     if ([obj isKindOfClass:[NSString class]]) {
         return [NSString stringWithFormat:@"\"%@\",\n", obj];
     }else if ([obj isKindOfClass:[NSNumber class]]){
-        //            if ([obj isEqualToNumber:@(YES)]) {
-        //                value = @"true,\n";
-        //            }else if ([obj isEqualToNumber:@(NO)]){
-        //                value = @"false,\n";
-        //            }else{
-        return [NSString stringWithFormat:@"%@,\n", [(NSNumber *)obj description]];
-        //            }
+//        __NSCFNumber __NSCFBoolean
+        if ([obj isKindOfClass:NSClassFromString(@"__NSCFBoolean")]) {
+            return [(NSNumber *)obj boolValue] ? @"true,\n" : @"false,\n";
+        }else{
+           return [NSString stringWithFormat:@"%@,\n", [(NSNumber *)obj description]];
+        }
     }else if ([obj isEqual:[NSNull null]]) {
         return @"null,\n";
     }else if (ZHLogConditionDic(obj)){
