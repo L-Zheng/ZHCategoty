@@ -16,7 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 //[UIFont fontNamesForFamilyName:@""]
 
 /** 加载指定路径的ttf字体 */
-+ (UIFont *)zh_customFontWithSrc:(NSString *)fontSrc size:(CGFloat)fontSize;
++ (UIFont *)zh_coreText_customFontWithSrc:(NSString *)fontSrc size:(CGFloat)fontSize;
+
++ (UIFont *)zh_descriptor_customFontWithSrc:(NSString *)fontSrc size:(CGFloat)fontSize;
 
 @end
 
