@@ -39,6 +39,13 @@
 + (UIImage *)zh_captureImageWithView:(UIView *)view{
     if (!view) return nil;
     
+    // 使用此方法 子视图中的 视频画面/wkwebview/uiview  都可截取下来
+    UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, 0.0);
+    [view drawViewHierarchyInRect:view.bounds afterScreenUpdates:YES];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
+    
     if ([view isKindOfClass:[WKWebView class]]) {
         __block UIImage *res = nil;
         [self zh_captureImageWithWKWebView:(WKWebView *)view isAll:NO completion:^(UIImage *image) {
