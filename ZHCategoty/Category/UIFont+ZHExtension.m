@@ -118,12 +118,23 @@ static id _instance;
         CTFontManagerUnregisterGraphicsFont(originFont, nil);
         CGFontRelease(originFont);
     }
-    //注册新字体
-    CTFontManagerRegisterGraphicsFont(font, nil);
+    /* 注册新字体
+     如果项目info.plist配置了相同的字体 Fonts provided by application
+     则注册失败  并且不能取消注册  CTFontManagerUnregisterGraphicsFont
+     
+     <key>UIAppFonts</key>
+     <array>
+         <string>iconfont.ttf</string>
+         <string>DIN-Bold.ttf</string>
+     </array>
+     */
+    CFErrorRef error = NULL;
+    CTFontManagerRegisterGraphicsFont(font, &error);
     //release
     CGDataProviderRelease(fontDataProvider);
     CGFontRelease(font);
     CFRelease(fontNameRef);
+    CFRelease(error);
     return fontName;
 }
 @end
